@@ -195,6 +195,7 @@ struct Asteroid{
     int pos_y;
     int pos_y2;
     int etat; // 0 = hors de l'ecran et 1 = a l'ecran
+    int vitesse;
 };
 
 struct Asteroid tabAsteroid[NBRASTEROID];
@@ -208,6 +209,7 @@ void initTabAsteroid(){
         tabAsteroid[i].pos_y2=tabAsteroid[i].pos_y+tabAsteroid[i].taille;
         tabAsteroid[i].pos_x2=tabAsteroid[i].pos_x+tabAsteroid[i].taille;
         tabAsteroid[i].etat=0;
+        tabAsteroid[i].vitesse=5; // 1 etant le plus rapide, 10 le plus lent
     }
 }
 
@@ -230,8 +232,10 @@ void drawAsteroid(){
 void moveAsteroid(){
     for (int i=0;i<NBRASTEROID;i++){
         if (tabAsteroid[i].etat==1){
-            tabAsteroid[i].pos_y++;
-            tabAsteroid[i].pos_y2++;
+            if (compteurloop%tabAsteroid[i].vitesse==1){
+                tabAsteroid[i].pos_y++;
+                tabAsteroid[i].pos_y2++;
+            }
         }
         if (tabAsteroid[i].pos_y>WINDOW_HEIGHT){ //Si l'asteroid sort de l'ecran en bas
             tabAsteroid[i].etat=0;
@@ -246,7 +250,7 @@ int num_alea(int nmax){
 
 void loop(){ // Pour faire apparaitre un asteroid toutes les 200 boucles
     compteurloop++; //Etat de la boucle
-    if (compteurloop%200==1){
+    if (compteurloop%200==1){ // Ajouter une variable a la place de 200
         tabAsteroid[compteurasteroid].etat=1; // On passe l'asteroid actuel a l'etat actif (1)
         compteurasteroid++; // on incremente le numero de l'asteroid
         if (compteurasteroid>NBRASTEROID){ // Nous avons seulement 10 asteroid donc on remet à 0 si on depasse le 10eme 
@@ -277,6 +281,7 @@ void remiseAZero(){
             tabAsteroid[i].pos_y2=tabAsteroid[i].pos_y+tabAsteroid[i].taille;
             tabAsteroid[i].pos_x=num_alea(WINDOW_WIDTH-tabAsteroid[i].taille);
             tabAsteroid[i].pos_x2=tabAsteroid[i].pos_x+tabAsteroid[i].taille;
+            //Ajouter un random pour la vitesse
         }
     }
 }
