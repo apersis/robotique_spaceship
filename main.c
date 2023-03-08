@@ -1,6 +1,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <time.h>
+#include <stdlib.h>
 
 #define WINDOW_WIDTH 32
 #define WINDOW_HEIGHT 64
@@ -53,11 +54,11 @@ void drawGame(){
     loop();
     usleep(1000000 / FPS); // 60 images par seconde | 1000000 = 1 seconde
 }
-void KeyPressed(SDL_Keycode touche){
+//void KeyPressed(SDL_Keycode touche){
     /** @brief event.key.keysym.sym renvoi la touche appuyé
      *
      */
-    switch (touche) {
+    /*switch (touche) {
         // Voir doc SDL_Keycode pour plus de touches https://wiki.libsdl.org/SDL_Keycode
         // ici exemple ou appuyer sur les touches Q | D modifie x (position du carré dans drawGame())
         case SDLK_q:
@@ -79,49 +80,12 @@ void KeyPressed(SDL_Keycode touche){
         default:
             break;
     }
-}
-void joyButtonPressed(){
-}
+}*/
 
 void gameLoop() {
     int programLaunched = 1;
     while (programLaunched == 1) {
         // Boucle pour garder le programme ouvert
-        // lorsque programLaunched est different de 1
-        // on sort de la boucle, donc de la fonction
-        SDL_Event event;
-        while (SDL_PollEvent(&event)) {
-            // boucle pour la gestion d'évenement
-            switch (event.type) {
-                /** event.type renvoi le type d'evenement qui se passe
-                 * (si on appuie sur une touche, clique de souris...)
-                 * en fonction du type d'évènement on à alors
-                 * différentes information accessibles
-                 * voir doc pour plus d'event https://wiki.libsdl.org/SDL_EventType
-                 */
-                case SDL_QUIT:
-                    // quand on clique sur fermer la fénêtre en haut à droite
-                    programLaunched = 0;
-                    break;
-                case SDL_MOUSEBUTTONUP:
-                    /* clique de la souris
-                     * event.motion.y | event.motion.x pour les positions de la souris
-                     */
-                    printf("position de la souris x : %d , y : %d\n", event.motion.x, event.motion.y);
-                    break;
-                case SDL_KEYDOWN:
-                    KeyPressed(event.key.keysym.sym);
-                    break;
-                case SDL_JOYBUTTONDOWN:
-                    break;
-                default:
-                    break;
-            }
-        }
-        /* coder ici pour que le code s'execute après chaque évenement
-         * exemple dessiner un carré avec position int x, int y qu'on peut
-         * deplacer lorsqu'on appuie sur une touche
-         */
         drawGame();
     }
 }
@@ -130,14 +94,13 @@ int main(){
     /** @description 3 fonctions dans le main qui permettent de créer l'application et la maintenir ouverte :
      *  init(...) : initialiser la SDL/ fenêtre
      *  gameLoop() : boucle de jeu dans laquelle l'application reste ouverte
-     *  freeAndTerminate() : quitte le programme proprement
+     *  clear() : remet a 0 l'ecran pour l'eteindre
      */
     srand(time(NULL));
-    init(WINDOW_WIDTH, WINDOW_HEIGHT);
     init_game();
     gameLoop();
     printf("Fin du programme\n");
-    freeAndTerminate();
+    clear();
 }
 
 
